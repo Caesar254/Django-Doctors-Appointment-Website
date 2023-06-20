@@ -1,0 +1,182 @@
+{% extends 'base.html'   %}
+
+
+{%  block style   %}
+<style>
+  .widget-49 .widget-49-title-wrapper .widget-49-date-base {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #f0fafb;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+  }
+
+  .widget-49 .widget-49-title-wrapper .widget-49-date-base .widget-49-date-day {
+    color: #68CBD7;
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .widget-49 .widget-49-title-wrapper .widget-49-date-base .widget-49-date-month {
+    color: #68CBD7;
+    line-height: 1;
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  .widget-49 .widget-49-title-wrapper .widget-49-meeting-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+  }
+
+  .widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-pro-title {
+    color: #3c4142;
+    font-size: 14px;
+  }
+
+  .widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-meeting-time {
+    color: #B1BAC5;
+    font-size: 13px;
+  }
+
+  .widget-49 .widget-49-meeting-points {
+    font-weight: 400;
+    font-size: 13px;
+    margin-top: .5rem;
+  }
+
+  .widget-49 .widget-49-meeting-points .widget-49-meeting-item {
+    display: list-item;
+    color: #727686;
+  }
+
+  .widget-49 .widget-49-meeting-points .widget-49-meeting-item span {
+    margin-left: .5rem;
+  }
+
+  .widget-49 .widget-49-meeting-action {
+    text-align: right;
+  }
+
+  .widget-49 .widget-49-meeting-action a {
+    text-transform: uppercase;
+  }
+
+  .wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center
+  }
+
+  .page-link {
+      position: relative;
+      display: block;
+      color: #D85600 !important;
+      text-decoration: none;
+      background-color: #fff;
+      border: 1px solid #D85600 !important
+  }
+
+  .page-link:hover {
+      z-index: 2;
+      color: #fff !important;
+      background-color: #D85600;
+      border-color: #024dbc
+  }
+
+  .page-link:focus {
+      z-index: 3;
+      outline: 0;
+      box-shadow: none
+  }
+</style>
+{%  endblock style %}
+
+{%   block content  %}
+
+{%   if messages %}
+<div class="card notification-card notification-invitation">
+    <div class="card-body">
+        {%   for message in messages%}
+            <div class="card-title">{{message}} </div>
+            {% endfor %}
+    </div>
+  </div>
+
+  {%  endif %}
+
+
+    <div class="container mt-5">
+        <div class="col-11 text-center mt-4 mb-4">
+            <h3>
+                Manage appointments
+            </h3>
+        </div>
+        <div class="row">
+
+                    {%    for app in appointments %}
+
+            <div class="col-lg-4">
+                <div class="card card-margin">
+                    <div class="card-header no-border">
+                        <h5 class="card-title">{{app.first_name}}  {{app.last_name}}</h5>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="widget-49">
+                            <div class="widget-49-title-wrapper">
+                                <div class="widget-49-date-primary">
+                                    <span class="widget-49-date-day">{{ app.sent_date|date:"d" }}</span>
+                                    <span class="widget-49-date-month">{{ app.sent_date|date:"M" }}</span>
+                                </div>
+                                <div class="widget-49-meeting-info">
+                                    <span class="widget-49-pro-title">{{app.email}}</span>
+                                    <span class="widget-49-meeting-time">{{app.phone}}</span>
+                                </div>
+                            </div>
+                            <div class="widget-49-meeting-points">
+                                <span>{{app.request}}</span>
+                            </div>
+                            <hr class="w-100">
+                            {%  if app.accepted == False %}
+                            <form method="POST" action="{% url 'manage' %}">
+                            {%  csrf_token %}
+                            <div class="form-group">
+                                <input type="date" name="date" class="form-control mb-2" 
+                                    placeholder="dd-mm-yyyy" value=""
+                                    min="1997-01-01" max="2030-12-31">
+                                <input class="btn-block btn-primary form-control" type="submit" value="Accept">
+                            </div>
+                          </form>
+                           {%  endif %}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            {% endfor  %}
+            </div>
+            
+           
+        <div class="wrapper">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item"><a class="page-link" href="#">6</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+        {%   endblock content %}
+
+
+  
